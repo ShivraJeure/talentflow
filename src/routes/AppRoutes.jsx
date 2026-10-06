@@ -1,34 +1,22 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Dashboard from '../pages/Dashboard/Dashboard'
+import { Routes, Route } from "react-router-dom";
 
-function Login() {
+import DashboardLayout from "../layouts/DashboardLayout";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import Employees from "../pages/Employees/Employees";
+import Projects from "../pages/Projects/Projects";
+import Skills from "../pages/Skills/Skills";
+
+const AppRoutes = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <h1 className="text-2xl font-bold">
-        Login
-      </h1>
-    </div>
-  )
-}
+    <Routes>
+      <Route element={<DashboardLayout />}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/employees" element={<Employees />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/skills" element={<Skills />} />
+      </Route>
+    </Routes>
+  );
+};
 
-export default function AppRoutes() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-
-        <Route path="/dashboard" element={<Dashboard />} />
-
-        <Route
-          path="/"
-          element={<Navigate to="/dashboard" replace />}
-        />
-
-        <Route
-          path="*"
-          element={<Navigate to="/dashboard" replace />}
-        />
-      </Routes>
-    </BrowserRouter>
-  )
-}
+export default AppRoutes;
