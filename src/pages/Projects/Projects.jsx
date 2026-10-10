@@ -5,17 +5,14 @@ import AllocationForm from "../../components/projects/AllocationForm";
 import EmployeeUtilization from "../../components/projects/EmployeeUtilization";
 import { fetchEmployees } from "../../features/employees/employeeSlice";
 import { removeAllocation } from "../../features/projects/projectSlice";
+import RecommendationPanel from "../../components/projects/RecommendationPanel";
 
 const Projects = () => {
   const dispatch = useDispatch();
 
-  const { projects, allocations } = useSelector(
-    (state) => state.projects
-  );
+  const { projects, allocations } = useSelector((state) => state.projects);
 
-  const { employees, loading } = useSelector(
-    (state) => state.employees
-  );
+  const { employees, loading } = useSelector((state) => state.employees);
 
   useEffect(() => {
     if (!employees.length && !loading) {
@@ -26,12 +23,10 @@ const Projects = () => {
   const allocationRecords = useMemo(() => {
     return allocations.map((allocation) => {
       const employee = employees.find(
-        (item) => item.id === allocation.employeeId
+        (item) => item.id === allocation.employeeId,
       );
 
-      const project = projects.find(
-        (item) => item.id === allocation.projectId
-      );
+      const project = projects.find((item) => item.id === allocation.projectId);
 
       return {
         ...allocation,
@@ -43,9 +38,8 @@ const Projects = () => {
   }, [allocations, employees, projects]);
 
   const getTeamSize = (projectId) =>
-    allocations.filter(
-      (allocation) => allocation.projectId === projectId
-    ).length;
+    allocations.filter((allocation) => allocation.projectId === projectId)
+      .length;
 
   return (
     <div className="space-y-8 p-4 md:p-6">
@@ -72,15 +66,21 @@ const Projects = () => {
         ) : (
           <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
             {projects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                teamSize={getTeamSize(project.id)}
-                employees={employees.filter(
-                  (employee) =>
-                    employee.availability !== "Not Available"
-                )}
-              />
+              <div>
+                <ProjectCard
+                  key={project.id}  
+                  project={project}
+                  teamSize={getTeamSize(project.id)}
+                  employees={employees.filter(
+                    (employee) => employee.availability !== "Not Available",
+                  )}
+                />
+                <RecommendationPanel
+                  project={project}
+                  employees={employees}
+                  allocations={allocations}
+                />
+              </div>
             ))}
           </div>
         )}
@@ -144,9 +144,7 @@ const Projects = () => {
 
                     <td className="px-5 py-4 text-gray-600 dark:text-gray-400">
                       {allocation.assignedAt
-                        ? new Date(
-                            allocation.assignedAt
-                          ).toLocaleDateString()
+                        ? new Date(allocation.assignedAt).toLocaleDateString()
                         : "—"}
                     </td>
 
