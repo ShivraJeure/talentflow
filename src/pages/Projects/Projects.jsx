@@ -1,32 +1,42 @@
+
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchEmployees } from "../../features/employees/employeeSlice";
+import { removeAllocation } from "../../features/projects/projectSlice";
 import ProjectCard from "../../components/projects/ProjectCard";
 import AllocationForm from "../../components/projects/AllocationForm";
 import EmployeeUtilization from "../../components/projects/EmployeeUtilization";
-import { fetchEmployees } from "../../features/employees/employeeSlice";
-import { removeAllocation } from "../../features/projects/projectSlice";
 import RecommendationPanel from "../../components/projects/RecommendationPanel";
+import SkillGapAnalysis from "../../components/projects/SkillGapAnalysis";
 
 const Projects = () => {
   const dispatch = useDispatch();
 
-  const { projects, allocations } = useSelector((state) => state.projects);
+  const { projects = [], allocations = [] } = useSelector(
+    (state) => state.projects
+  );
 
-  const { employees, loading } = useSelector((state) => state.employees);
+  const employeeState = useSelector((state) => state.employees);
+
+  const employees = employeeState?.employees || [];
+  const employeeLoading =
+    employeeState?.isLoading ?? employeeState?.loading ?? false;
 
   useEffect(() => {
-    if (!employees.length && !loading) {
+    if (employees.length === 0 && !employeeLoading) {
       dispatch(fetchEmployees());
     }
-  }, [dispatch, employees.length, loading]);
+  }, [dispatch, employees.length, employeeLoading]);
 
   const allocationRecords = useMemo(() => {
     return allocations.map((allocation) => {
       const employee = employees.find(
-        (item) => item.id === allocation.employeeId,
+        (item) => item.id === allocation.employeeId
       );
 
-      const project = projects.find((item) => item.id === allocation.projectId);
+      const project = projects.find(
+        (item) => item.id === allocation.projectId
+      );
 
       return {
         ...allocation,
@@ -38,8 +48,9 @@ const Projects = () => {
   }, [allocations, employees, projects]);
 
   const getTeamSize = (projectId) =>
-    allocations.filter((allocation) => allocation.projectId === projectId)
-      .length;
+    allocations.filter(
+      (allocation) => allocation.projectId === projectId
+    ).length;
 
   return (
     <div className="space-y-8 p-4 md:p-6">
@@ -47,8 +58,10 @@ const Projects = () => {
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Project Management
         </h1>
+
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          Manage projects, allocate employees, and monitor resource capacity.
+          Manage projects, allocate employees, analyze skill gaps, and monitor
+          resource capacity.
         </p>
       </div>
 
@@ -65,23 +78,32 @@ const Projects = () => {
           </p>
         ) : (
           <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
-            {projects.map((project) => (
-              <div>
-                <ProjectCard
-                  key={project.id}  
-                  project={project}
-                  teamSize={getTeamSize(project.id)}
-                  employees={employees.filter(
-                    (employee) => employee.availability !== "Not Available",
-                  )}
-                />
-                <RecommendationPanel
-                  project={project}
-                  employees={employees}
-                  allocations={allocations}
-                />
-              </div>
-            ))}
+            {projects.map((project) => {
+              const availableEmployees = employees.filter(
+                (employee) => employee.availability !== "Not Available"
+              );
+
+              return (
+                <div key={project.id} className="space-y-4">
+                  <ProjectCard
+                    project={project}
+                    teamSize={getTeamSize(project.id)}
+                    employees={availableEmployees}
+                  />
+
+                  <RecommendationPanel
+                    project={project}
+                    employees={employees}
+                    allocations={allocations}
+                  />
+
+                  <SkillGapAnalysis
+                    project={project}
+                    employees={employees}
+                  />
+                </div>
+              );
+            })}
           </div>
         )}
       </section>
@@ -90,6 +112,7 @@ const Projects = () => {
         <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
           Allocate Resources
         </h2>
+
         <AllocationForm />
       </section>
 
@@ -98,6 +121,7 @@ const Projects = () => {
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Allocation History
           </h2>
+
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Review and manage current employee assignments.
           </p>
@@ -127,6 +151,7 @@ const Projects = () => {
                       <p className="font-medium text-gray-900 dark:text-white">
                         {allocation.employeeName}
                       </p>
+
                       <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                         {allocation.employeeRole}
                       </p>
@@ -144,7 +169,9 @@ const Projects = () => {
 
                     <td className="px-5 py-4 text-gray-600 dark:text-gray-400">
                       {allocation.assignedAt
-                        ? new Date(allocation.assignedAt).toLocaleDateString()
+                        ? new Date(
+                            allocation.assignedAt
+                          ).toLocaleDateString()
                         : "—"}
                     </td>
 

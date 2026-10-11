@@ -5,12 +5,19 @@ import { fetchEmployees } from "../../features/employees/employeeSlice";
 import EmployeeList from "../../components/employees/EmployeeList";
 import EmployeeFilters from "../../components/employees/EmployeeFilters";
 
+const getSkillName = (skill) => {
+  if (typeof skill === "string") {
+    return skill.trim();
+  }
+
+  return skill?.name?.trim() || "";
+};
 
 const Employees = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { employees, isLoading } = useSelector(
+  const { employees = [], isLoading = false } = useSelector(
     (state) => state.employees
   );
 
@@ -25,15 +32,22 @@ const Employees = () => {
   }, [dispatch]);
 
   const roles = useMemo(() => {
-    return [...new Set(employees.map((employee) => employee.role))];
+    return [
+      ...new Set(
+        employees.map((employee) => employee.role).filter(Boolean)
+      ),
+    ].sort();
   }, [employees]);
 
   const skills = useMemo(() => {
     return [
       ...new Set(
-        employees.flatMap((employee) => employee.skills || [])
+        employees
+          .flatMap((employee) => employee.skills || [])
+          .map(getSkillName)
+          .filter(Boolean)
       ),
-    ].sort();
+    ].sort((a, b) => a.localeCompare(b));
   }, [employees]);
 
   const filteredEmployees = useMemo(() => {
@@ -42,15 +56,21 @@ const Employees = () => {
     const filtered = employees.filter((employee) => {
       const matchesSearch =
         employee.name?.toLowerCase().includes(search) ||
-        employee.email?.toLowerCase().includes(search);
+        employee.email?.toLowerCase().includes(search) ||
+        employee.role?.toLowerCase().includes(search) ||
+        (employee.skills || []).some((skill) =>
+          getSkillName(skill).toLowerCase().includes(search)
+        );
 
       const matchesRole =
         roleFilter === "All" || employee.role === roleFilter;
 
       const matchesSkill =
         skillFilter === "All" ||
-        employee.skills?.some(
-          (skill) => skill.toLowerCase() === skillFilter.toLowerCase()
+        (employee.skills || []).some(
+          (skill) =>
+            getSkillName(skill).toLowerCase() ===
+            skillFilter.toLowerCase()
         );
 
       const matchesAvailability =
@@ -67,15 +87,15 @@ const Employees = () => {
 
     return [...filtered].sort((a, b) => {
       if (sortBy === "name-asc") {
-        return a.name.localeCompare(b.name);
+        return (a.name || "").localeCompare(b.name || "");
       }
 
       if (sortBy === "name-desc") {
-        return b.name.localeCompare(a.name);
+        return (b.name || "").localeCompare(a.name || "");
       }
 
       if (sortBy === "role-asc") {
-        return a.role.localeCompare(b.role);
+        return (a.role || "").localeCompare(b.role || "");
       }
 
       if (sortBy === "availability") {
@@ -120,14 +140,14 @@ const Employees = () => {
   }
 
   return (
-    <div>
-      <div className="mb-6">
+    <div className="space-y-5">
+      <div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Employees
         </h1>
 
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          Search, filter, sort and manage employees.
+          Search, filter, sort and explore employee skills.
         </p>
       </div>
 
@@ -146,7 +166,7 @@ const Employees = () => {
         skills={skills}
       />
 
-      <div className="mb-5 flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Showing{" "}
           <span className="font-semibold text-gray-900 dark:text-white">
@@ -160,10 +180,21 @@ const Employees = () => {
         </p>
       </div>
 
-      <EmployeeList
-        employees={filteredEmployees}
-        onViewEmployee={handleViewEmployee}
-      />
+      {filteredEmployees.length === 0 ? (
+        <div className="rounded-xl border border-gray-200 p-8 text-center dark:border-gray-700">
+          <p className="font-medium text-gray-900 dark:text-white">
+            No employees found
+          </p>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Try changing your search or filters.
+          </p>
+        </div>
+      ) : (
+        <EmployeeList
+          employees={filteredEmployees}
+          onViewEmployee={handleViewEmployee}
+        />
+      )}
     </div>
   );
 };
