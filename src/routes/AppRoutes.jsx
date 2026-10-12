@@ -5,6 +5,7 @@ import Employees from "../pages/Employees/Employees";
 import EmployeeDetails from "../pages/Employees/EmployeeDetails"
 import Projects from "../pages/Projects/Projects";
 import Skills from "../pages/Skills/Skills";
+import Analytics from "../pages/Analytics/Analytics";
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
         <Route path="/employees/:id" element={<EmployeeDetails />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/skills" element={<Skills />} />
+        <Route path="/analytics" element={<Analytics />} />
       </Route>
     </Routes>
   );
