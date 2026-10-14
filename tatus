@@ -1,0 +1,25 @@
+[33mcommit 9125fb70a78cb867eaff4310f0bf48d853ce655a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Shivraj Jeure <shivrajjeure12345@gmail.com>
+Date:   Tue Oct 13 11:58:10 2026 +0530
+
+    feat: add employee matching assistant and tests
+
+ package-lock.json                               | 2704 [32m++++++++++++++++++++++[m[31m-[m
+ package.json                                    |   33 [32m+[m[31m-[m
+ server/.env.example                             |    5 [32m+[m
+ server/.gitignore                               |    3 [32m+[m
+ server/package.json                             |   20 [32m+[m
+ server/src/index.js                             |   37 [32m+[m
+ server/src/routes/aiRoutes.js                   |   60 [32m+[m
+ server/src/services/aiMatchingService.js        |  145 [32m++[m
+ server/src/services/ruleBasedMatchingService.js |  148 [32m++[m
+ server/src/utils/validateMatchingInput.js       |   53 [32m+[m
+ src/components/layout/Sidebar.jsx               |    1 [32m+[m
+ src/pages/Ai/AIAssistant.jsx                    |  337 [32m+++[m
+ src/routes/AppRoutes.jsx                        |    2 [32m+[m
+ src/services/aiService.js                       |   14 [32m+[m
+ src/test/setup.js                               |    1 [32m+[m
+ src/utils/productionHelpers.js                  |   43 [32m+[m
+ src/utils/productionHelpers.test.js             |   81 [32m+[m
+ vite.config.js                                  |   26 [32m+[m[31m-[m
+ 18 files changed, 3636 insertions(+), 77 deletions(-)
