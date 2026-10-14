@@ -7,7 +7,7 @@ const openai = apiKey
   ? new OpenAI({ apiKey })
   : null;
 
-export const generateAIRecommendations = async (employees, project) => {
+export const generateEmployeeMatches = async (employees, project) => {
   if (openai) {
     try {
       const response = await openai.chat.completions.create({
