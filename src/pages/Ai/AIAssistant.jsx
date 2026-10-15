@@ -96,7 +96,7 @@ const AIAssistant = () => {
           TalentFlow Intelligence
         </p>
 
-        <h1 className="mt-2 text-3xl font-bold">
+        <h1 className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
           TalentFlow Project Allocation Assistant
         </h1>
 
@@ -108,7 +108,7 @@ const AIAssistant = () => {
               : "Employee matching and skill-gap analysis"}
         </p>
 
-        <p className="mt-2 text-sm text-gray-500">
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
           Discover suitable employees, identify missing skills, and review
           explainable project-match recommendations.
         </p>
@@ -121,7 +121,7 @@ const AIAssistant = () => {
         <div>
           <label
             htmlFor="projectName"
-            className="mb-2 block text-sm font-medium"
+            className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-100"
           >
             Project name
           </label>
@@ -132,14 +132,14 @@ const AIAssistant = () => {
             onChange={(event) => setProjectName(event.target.value)}
             required
             maxLength={150}
-            className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
           />
         </div>
 
         <div>
           <label
             htmlFor="requiredSkills"
-            className="mb-2 block text-sm font-medium"
+            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500"
           >
             Required skills (comma-separated)
           </label>
@@ -149,15 +149,14 @@ const AIAssistant = () => {
             value={requiredSkills}
             onChange={(event) => setRequiredSkills(event.target.value)}
             required
-            className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="React, JavaScript, Redux Toolkit"
+            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500"
           />
         </div>
 
         <div>
           <label
             htmlFor="employeeJson"
-            className="mb-2 block text-sm font-medium"
+            className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-100"
           >
             Employee data (JSON array)
           </label>
@@ -169,7 +168,7 @@ const AIAssistant = () => {
             required
             rows={12}
             spellCheck={false}
-            className="w-full rounded-lg border border-gray-300 bg-transparent p-4 font-mono text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full rounded-lg border border-gray-300 bg-white p-4 font-mono text-sm text-gray-900 outline-none focus:ring-2 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
           />
 
           <p className="mt-2 text-xs text-gray-500">
@@ -243,7 +242,7 @@ const AIAssistant = () => {
                 </div>
 
                 <div>
-                  <h4 className="text-sm font-semibold">Matching skills</h4>
+                  <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Matching skills</h4>
 
                   <div className="mt-2 flex flex-wrap gap-2">
                     {match.matchedSkills.length > 0 ? (
@@ -256,7 +255,7 @@ const AIAssistant = () => {
                         </span>
                       ))
                     ) : (
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                         No matching skills identified.
                       </p>
                     )}
@@ -264,7 +263,7 @@ const AIAssistant = () => {
                 </div>
 
                 <div>
-                  <h4 className="text-sm font-semibold">Skill gaps</h4>
+                  <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Skill gaps</h4>
 
                   <div className="mt-2 flex flex-wrap gap-2">
                     {match.missingSkills.length > 0 ? (
@@ -277,7 +276,7 @@ const AIAssistant = () => {
                         </span>
                       ))
                     ) : (
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                         No skill gaps reported.
                       </p>
                     )}
@@ -285,7 +284,7 @@ const AIAssistant = () => {
                 </div>
 
                 <div>
-                  <h4 className="text-sm font-semibold">Why this candidate?</h4>
+                  <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Why this candidate?</h4>
 
                   <p className="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-300">
                     {match.explanation}
@@ -294,7 +293,7 @@ const AIAssistant = () => {
 
                 {match.recommendations.length > 0 && (
                   <div>
-                    <h4 className="text-sm font-semibold">
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                       Development recommendations
                     </h4>
 
@@ -313,9 +312,9 @@ const AIAssistant = () => {
 
           {result.caveats.length > 0 && (
             <div className="rounded-xl border p-4">
-              <h3 className="font-semibold">Considerations</h3>
+              <h3 className="rounded-xl border border-gray-200 p-4 text-sm text-gray-700 dark:border-gray-700 dark:text-gray-300">Considerations</h3>
 
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-500">
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-600 dark:text-gray-400">
                 {result.caveats.map((caveat, index) => (
                   <li key={`${index}-${caveat}`}>{caveat}</li>
                 ))}
